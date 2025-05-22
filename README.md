@@ -5,7 +5,7 @@ Source Code
 ## Project Setup
 
 ```sh
-git clone https://github.com/Cake-House/php-n9-cakehouse.git
+git clone https://github.com/DATNCakeHouse/DATN_CakeHouse.git
 ```
 
 
