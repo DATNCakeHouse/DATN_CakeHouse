@@ -4,14 +4,14 @@
             <ul class="breadcrumb">
                 <li><a [routerLink]="['/home']">Trang chủ</a></li>
                 <li><a [routerLink]="['/all-product']">Cửa hàng</a></li>
-                <li>Giỏ hàng</li>
+                <li>Giỏ hàng của bạn</li>
             </ul>
         </div>
     </div>
     <div class="ps-section--shopping ps-shopping-cart">
         <div class="container">
             <div class="ps-section__header">
-                <h1>Giỏ Hàng</h1>
+                <h2>Giỏ Hàng Của Bạn</h2>
             </div>
             <div class="ps-section__content">
                 <div class="table-responsive" *ngIf="cartDetails.length>0">
@@ -64,13 +64,13 @@
                 </div>
                 <div class="row mt-5 mb-5" *ngIf="cartDetails.length==0">
                     <div class="col-8 offset-2 text-center">
-                        <h2 style="color: #fcb800;">Giỏ hàng trống</h2>
-                        <h2 style="color: #fcb800;;">Hãy chọn 1 vài sản phẩm vào giỏ hàng của bạn.</h2>
+                        <h2 style="color: #5B3236;">Giỏ hàng trống</h2>
+                        <h2 style="color: #5B3236;">Hãy chọn 1 vài sản phẩm vào giỏ hàng của bạn.</h2>
                     </div>
                 </div>
                 <div class="ps-section__cart-actions">
                     <a class="ps-btn" [routerLink]="['/all-product']">
-                    <i class="icon-arrow-left"></i> Quay lại cửa hàng</a>
+                    <i class="icon-arrow-left"></i> Tiếp tục mua hàng</a>
                 </div>
             </div>
 

@@ -657,6 +657,7 @@ html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
+  width: 100%;
 }
 
 body {
@@ -6976,7 +6977,7 @@ textarea.form-control {
 }
 
 .widget .widget-title {
-  margin-bottom: 2.5rem;
+  /* margin-bottom: 2.5rem; */
   font-weight: 700;
 }
 
@@ -7038,11 +7039,14 @@ textarea.form-control {
 }
 
 .widget_shop .widget-title {
-  margin-bottom: 25px;
+  /* margin-bottom: 25px; */
+  background-color: #5B3236;
   font-size: 18px;
   text-transform: uppercase;
-  font-weight: 400;
-  color: #000;
+  font-weight: bold;
+  color: #fff;
+  padding: 8px 0;
+  text-align: center;
 }
 
 .widget_shop .ps-checkbox {
@@ -9565,7 +9569,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 .ps-product--detail > .ps-product__content {
-  padding-top: 100px;
+  padding-top: 30px;
 }
 
 .ps-product--detail .ps-tab-list {
@@ -11998,7 +12002,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 .ps-form--account .ps-form__content {
-  padding: 30px 30px 0;
+  padding: 30px 30px 20px;
 }
 
 .ps-form--account .ps-form__content h5 {
@@ -14655,7 +14659,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 
 #homepage-1 .ps-download-app {
   margin-top: 80px;
-  margin-bottom: 100px;
+  margin-bottom: 35px;
 }
 
 @media (max-width: 767px) {
@@ -16503,14 +16507,14 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 .ps-footer {
-  padding-top: 70px;
+  padding-top: 40px;
 }
 
 .ps-footer__widgets {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
-  padding-bottom: 35px;
+  /* padding-bottom: 35px; */
 }
 
 .ps-footer__links {
@@ -16560,7 +16564,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 .ps-footer__copyright {
-  padding: 35px 0;
+  padding: 15px 0;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
