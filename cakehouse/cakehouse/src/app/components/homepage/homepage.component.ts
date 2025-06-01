@@ -233,7 +233,7 @@ export class HomepageComponent implements OnInit, OnDestroy {
         (error) => {
           this.toastr.error('Sản phẩm này có thể đã hết hàng!', 'Hệ thống');
           this.router.navigate(['/home']);
-          window.location.href = '/';
+          // window.location.href = '/';
         }
       );
     });

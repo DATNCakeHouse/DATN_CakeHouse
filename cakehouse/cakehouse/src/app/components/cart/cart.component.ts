@@ -10,71 +10,78 @@ import { SessionService } from 'src/app/services/session.service';
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.css']
+  styleUrls: ['./cart.component.css'],
 })
 export class CartComponent implements OnInit {
-
   cart!: Cart;
   cartDetail!: CartDetail;
   cartDetails!: CartDetail[];
 
-  discount!:number;
-  amount!:number;
-  amountReal!:number;
+  discount!: number;
+  amount!: number;
+  amountReal!: number;
 
   constructor(
     private cartService: CartService,
     private toastr: ToastrService,
     private router: Router,
-    private sessionService: SessionService) {
-
-   }
+    private sessionService: SessionService
+  ) {}
 
   ngOnInit(): void {
     this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      window.scrollTo(0, 0)
+      window.scrollTo(0, 0);
     });
-    this.discount=0;
-    this.amount=0;
-    this.amountReal=0;
+    this.discount = 0;
+    this.amount = 0;
+    this.amountReal = 0;
     this.getAllItem();
   }
 
   getAllItem() {
     let email = this.sessionService.getUser();
-    this.cartService.getCart(email).subscribe(data => {
+    this.cartService.getCart(email).subscribe((data) => {
       this.cart = data as Cart;
-      this.cartService.getAllDetail(this.cart.cartId).subscribe(data => {
+      this.cartService.getAllDetail(this.cart.cartId).subscribe((data) => {
         this.cartDetails = data as CartDetail[];
         this.cartService.setLength(this.cartDetails.length);
-        this.cartDetails.forEach(item=>{
+        this.cartDetails.forEach((item) => {
           this.amountReal += item.product.price * item.quantity;
           this.amount += item.price;
-        })
+        });
         this.discount = this.amount - this.amountReal;
-      })
-    })
+      });
+    });
   }
 
   update(id: number, quantity: number) {
     if (quantity < 1) {
       this.delete(id);
     } else {
-      this.cartService.getOneDetail(id).subscribe(data => {
-        this.cartDetail = data as CartDetail;
-        this.cartDetail.quantity = quantity;
-        this.cartDetail.price = (this.cartDetail.product.price * (1 - this.cartDetail.product.discount / 100)) * quantity;
-        this.cartService.updateDetail(this.cartDetail).subscribe(data => {
-          this.ngOnInit();
-        }, error => {
-          this.toastr.error('Lỗi!' + error.status, 'Hệ thống');
-        })
-      }, error => {
-        this.toastr.error('Lỗi! ' + error.status, 'Hệ thống');
-      })
+      this.cartService.getOneDetail(id).subscribe(
+        (data) => {
+          this.cartDetail = data as CartDetail;
+          this.cartDetail.quantity = quantity;
+          this.cartDetail.price =
+            this.cartDetail.product.price *
+            (1 - this.cartDetail.product.discount / 100) *
+            quantity;
+          this.cartService.updateDetail(this.cartDetail).subscribe(
+            (data) => {
+              this.ngOnInit();
+            },
+            (error) => {
+              this.toastr.error('Lỗi!' + error.status, 'Hệ thống');
+            }
+          );
+        },
+        (error) => {
+          this.toastr.error('Lỗi! ' + error.status, 'Hệ thống');
+        }
+      );
     }
   }
 
@@ -86,17 +93,43 @@ export class CartComponent implements OnInit {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       cancelButtonText: 'Không',
-      confirmButtonText: 'Xoá'
+      confirmButtonText: 'Xoá',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.cartService.deleteDetail(id).subscribe(data => {
-          this.toastr.success('Xoá thành công!', 'Hệ thống');
-          this.ngOnInit();
-        }, error => {
-          this.toastr.error('Xoá thất bại! ' + error.status, 'Hệ thống');
-        })
+        this.cartService.deleteDetail(id).subscribe(
+          (data) => {
+            this.toastr.success('Xoá thành công!', 'Hệ thống');
+            this.ngOnInit();
+          },
+          (error) => {
+            this.toastr.error('Xoá thất bại! ' + error.status, 'Hệ thống');
+          }
+        );
       }
-    })
+    });
   }
 
+  onCheckout() {
+    const outOfStockItems = this.cartDetails.filter(
+      (item) => item.quantity > item.product.quantity
+    );
+
+    if (outOfStockItems.length > 0) {
+      const message = outOfStockItems
+        .map(
+          (i) => `${i.product.name} chỉ còn ${i.product.quantity} sản phẩm`
+        )
+        .join('\n');
+      Swal.fire({
+        icon: 'error',
+        title: 'Không đủ bánh',
+        text: 'Một số sản phẩm vượt quá số lượng cho phép bán\n' + message,
+        customClass: {
+          popup: 'text-left',
+        },
+      });
+    } else {
+      this.router.navigate(['/checkout']);
+    }
+  }
 }

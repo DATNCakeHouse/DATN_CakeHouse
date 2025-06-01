@@ -191,8 +191,8 @@ export class ProductDetailComponent implements OnInit {
         })
       }, error => {
         this.toastr.error('Sản phẩm này có thể đã hết hàng!', 'Hệ thống');
-        this.router.navigate(['/home']);
-        window.location.href = "/";
+        // this.router.navigate(['/home']);
+        // window.location.href = "/";
       })
     })
   }

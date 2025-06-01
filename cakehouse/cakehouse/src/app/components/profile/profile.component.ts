@@ -15,10 +15,9 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-
   customer!: Customer;
   orders!: Order[];
 
@@ -33,9 +32,8 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private orderService: OrderService,
     private webSocketService: WebSocketService,
-    private notificationService: NotificationService) {
-
-  }
+    private notificationService: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.webSocketService.openWebSocket();
@@ -43,10 +41,13 @@ export class ProfileComponent implements OnInit {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      window.scrollTo(0, 0)
+      window.scrollTo(0, 0);
     });
     this.getCustomer();
     this.getOrder();
+    if (!this.customer.image) {
+      this.customer.image = 'img/default-avatar.png';
+    }
   }
 
   ngOnDestroy(): void {
@@ -55,31 +56,37 @@ export class ProfileComponent implements OnInit {
 
   getCustomer() {
     let email = this.sessionService.getUser();
-    this.customerService.getByEmail(email).subscribe(data => {
-      this.customer = data as Customer;
-    }, error => {
-      this.toastr.error('Lỗi thông tin', 'Hệ thống')
-      window.location.href = ('/');
-    })
+    this.customerService.getByEmail(email).subscribe(
+      (data) => {
+        this.customer = data as Customer;
+      },
+      (error) => {
+        this.toastr.error('Lỗi thông tin', 'Hệ thống');
+        window.location.href = '/';
+      }
+    );
   }
 
   getOrder() {
     let email = this.sessionService.getUser();
-    this.orderService.get(email).subscribe(data => {
-      this.orders = data as Order[];
-      this.done = 0;
-      this.orders.forEach(o => {
-        if (o.status === 2) {
-          this.done += 1
-        }
-      })
-    }, error => {
-      this.toastr.error('Lỗi server', 'Hệ thống');
-    })
+    this.orderService.get(email).subscribe(
+      (data) => {
+        this.orders = data as Order[];
+        this.done = 0;
+        this.orders.forEach((o) => {
+          if (o.status === 2) {
+            this.done += 1;
+          }
+        });
+      },
+      (error) => {
+        this.toastr.error('Lỗi server', 'Hệ thống');
+      }
+    );
   }
 
   cancel(id: number) {
-    if(id===-1) {
+    if (id === -1) {
       return;
     }
     Swal.fire({
@@ -88,30 +95,41 @@ export class ProfileComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonText: 'Không',
-      confirmButtonText: 'Huỷ'
+      confirmButtonText: 'Huỷ',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.orderService.cancel(id).subscribe(data => {
-          this.getOrder();
-          this.sendMessage(id);
-          this.toastr.success('Huỷ đơn hàng thành công!', 'Hệ thống');
-        }, error => {
-          this.toastr.error('Lỗi server', 'Hệ thống');
-        })
+        this.orderService.cancel(id).subscribe(
+          (data) => {
+            this.getOrder();
+            this.sendMessage(id);
+            this.toastr.success('Huỷ đơn hàng thành công!', 'Hệ thống');
+          },
+          (error) => {
+            this.toastr.error('Lỗi server', 'Hệ thống');
+          }
+        );
       }
-    })
-
+    });
   }
 
-  sendMessage(id:number) {
-    let chatMessage = new ChatMessage(this.customer.name, ' đã huỷ một đơn hàng');
-    this.notificationService.post(new Notification(0, this.customer.name + ' đã huỷ một đơn hàng ('+id+')')).subscribe(data => {
-      this.webSocketService.sendMessage(chatMessage);
-    })
+  sendMessage(id: number) {
+    let chatMessage = new ChatMessage(
+      this.customer.name,
+      ' đã huỷ một đơn hàng'
+    );
+    this.notificationService
+      .post(
+        new Notification(
+          0,
+          this.customer.name + ' đã huỷ một đơn hàng (' + id + ')'
+        )
+      )
+      .subscribe((data) => {
+        this.webSocketService.sendMessage(chatMessage);
+      });
   }
 
   finish() {
     this.ngOnInit();
   }
-
 }

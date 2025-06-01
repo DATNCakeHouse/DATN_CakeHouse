@@ -72,8 +72,17 @@ public class CartDetailApi {
 		List<CartDetail> listD = cartDetailRepository
 				.findByCart(cartRepository.findById(detail.getCart().getCartId()).get());
 		for (CartDetail item : listD) {
-			if (item.getProduct().getProductId() == detail.getProduct().getProductId()) {
-				item.setQuantity(item.getQuantity() + 1);
+//			if (item.getProduct().getProductId() == detail.getProduct().getProductId()) {
+//				item.setQuantity(item.getQuantity() + 1);
+//				item.setPrice(item.getPrice() + detail.getPrice());
+//				return ResponseEntity.ok(cartDetailRepository.save(item));
+//			}
+			if (item.getProduct().getProductId().equals(detail.getProduct().getProductId())) {
+				int newQuantity = item.getQuantity() + detail.getQuantity();
+				if (newQuantity > product.getQuantity()) {
+					return ResponseEntity.badRequest().build();
+				}
+				item.setQuantity(newQuantity);
 				item.setPrice(item.getPrice() + detail.getPrice());
 				return ResponseEntity.ok(cartDetailRepository.save(item));
 			}

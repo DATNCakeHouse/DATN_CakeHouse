@@ -15398,7 +15398,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 .menu--product-categories .menu__content {
   position: absolute;
   top: 100%;
-  left: 0;
+  right: -50px;
   z-index: 100;
   z-index: 1000;
   min-width: 100%;
